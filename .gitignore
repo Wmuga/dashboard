@@ -1,0 +1,5 @@
+bin/
+obj/
+Dashboard.csproj
+*.config
+Properties/
