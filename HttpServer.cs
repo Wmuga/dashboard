@@ -117,6 +117,8 @@ namespace Dashboard
 
         public EventSubServer(int port):base($"localhost:{port}/eventsub/callback/")
         {
+            Requests r = new Requests();
+            _appToken = r.TokenRequest();
             _subscriptionResponseDictionary = new Dictionary<string, StringResponseHandler>();
             _tunnel = new NgrokClient(port);
             CloseAll();
@@ -166,7 +168,6 @@ namespace Dashboard
 
         public HttpResponseMessage SetSubscription(SubscriptionType type, StringResponseHandler responseHandler,int id)
         {
-            Requests r = new Requests();
             HttpRequestMessage msg = new HttpRequestMessage
             {
                 RequestUri = new Uri("https://api.twitch.tv/helix/eventsub/subscriptions"),
@@ -174,7 +175,7 @@ namespace Dashboard
                 Headers =
                 {
                     {"Client-ID",Environment.GetEnvironmentVariable("BOT_CLIENT_ID")},
-                    {"Authorization", r.TokenRequest()}
+                    {"Authorization", _appToken}
                 }
             };
             string sType = CamelCaseToDotCase.Convert(type.ToString());
@@ -197,7 +198,6 @@ namespace Dashboard
 
         public HttpResponseMessage GetSubscriptions()
         {
-            Requests r = new Requests();
             HttpRequestMessage msg = new HttpRequestMessage
             {
                 RequestUri = new Uri("https://api.twitch.tv/helix/eventsub/subscriptions"),
@@ -205,7 +205,7 @@ namespace Dashboard
                 Headers =
                 {
                     {"Client-ID",Environment.GetEnvironmentVariable("BOT_CLIENT_ID")},
-                    {"Authorization", r.TokenRequest()}
+                    {"Authorization", _appToken}
                 }
             };
             HttpClient hc = new HttpClient();
@@ -214,7 +214,6 @@ namespace Dashboard
 
         public void Close(string id)
         {
-            Requests r = new Requests();
             HttpRequestMessage msg = new HttpRequestMessage
             {
                 RequestUri = new Uri($"https://api.twitch.tv/helix/eventsub/subscriptions?id={id}"),
@@ -222,7 +221,7 @@ namespace Dashboard
                 Headers =
                 {
                     {"Client-ID",Environment.GetEnvironmentVariable("BOT_CLIENT_ID")},
-                    {"Authorization", r.TokenRequest()}
+                    {"Authorization", _appToken}
                 }
             };
             HttpClient hc = new HttpClient();
@@ -241,6 +240,7 @@ namespace Dashboard
 
         private NgrokClient _tunnel;
         private Dictionary<string, StringResponseHandler> _subscriptionResponseDictionary;
+        private string _appToken;
     }
 }
 

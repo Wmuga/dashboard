@@ -64,7 +64,6 @@ namespace Dashboard
             foreach (int subNum  in subNums)
             {
                 HttpResponseMessage response = _eventSub.SetSubscription((SubscriptionType) subNum, AddEvent, 164555591);
-                AddText(response.Content.ReadAsStringAsync().Result+"\r\n");
             }
 
             button1.Enabled = false;
@@ -145,7 +144,7 @@ namespace Dashboard
                 {
                     while (reader.Read())
                     {
-                        events.Add($"{reader["event_type"]} by {reader["nickname"]}");
+                        events.Add($"{reader["event_type"]} - {reader["nickname"]}");
                     }
                 }
                 events.Reverse();
@@ -196,7 +195,7 @@ namespace Dashboard
             addEventCommand.Parameters.AddWithValue("@id", _lastId++);
             addEventCommand.Parameters.AddWithValue("@event_type", sType);
             addEventCommand.Parameters.AddWithValue("@nickname", nickname);
-            AddText($"{sType} by {nickname}");
+            AddText($"{sType} - {nickname}\r\n");
             addEventCommand.ExecuteNonQuery();
         }
 

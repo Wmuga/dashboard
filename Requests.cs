@@ -34,6 +34,7 @@ namespace Dashboard
              dynamic token = JObject.Parse(result)["access_token"];
              return "Bearer " +token.ToString();
         }
+        
 
         private HttpRequestMessage SetRequestHelix(HttpMethod method, Uri uri)
         {
