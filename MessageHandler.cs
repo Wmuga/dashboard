@@ -30,36 +30,47 @@ namespace Dashboard
 
         private void UserMembershipHandler(string msg)
         {
-            string[] splitMsg = msg.Split(' ');
-            string nickname = msg.Split('!')[0].Substring(1);
-            switch (splitMsg[1])
+            try
             {
-                case "JOIN":
+                string[] splitMsg = msg.Split(' ');
+                string nickname = msg.Split('!')[0].Substring(1);
+                switch (splitMsg[1])
                 {
-                    if (nickname != "justinfan9812")
+                    case "JOIN":
                     {
-                        AddText($"{nickname} joined\r\n");
-                        SQLiteCommand addViewerCommand = new SQLiteCommand(
-                            "insert into viewers (nickname) values(@nick);", _sqlc);
-                        addViewerCommand.Parameters.AddWithValue("@nick", nickname);
-                        addViewerCommand.ExecuteNonQuery();
+                        if (nickname != "justinfan9812")
+                        {
+                            AddText($"{nickname} joined\r\n");
+                            SQLiteCommand addViewerCommand = new SQLiteCommand(
+                                "insert into viewers (nickname) values(@nick);", _sqlc);
+                            addViewerCommand.Parameters.AddWithValue("@nick", nickname);
+                            addViewerCommand.ExecuteNonQuery();
+                        }
+
+                        break;
                     }
-                    break;
-                }
-                case "PART":
-                {
-                    if (nickname != "justinfan9812")
+                    case "PART":
                     {
-                        SQLiteCommand removeViewerCommand = new SQLiteCommand(
-                            $"delete from viewers where nickname = {nickname};", _sqlc);
-                        removeViewerCommand.ExecuteNonQuery();
+                        if (nickname != "justinfan9812")
+                        {
+                            AddText($"{nickname} parted\r\n");
+                            SQLiteCommand removeViewerCommand = new SQLiteCommand(
+                                $"delete from viewers where nickname = \"{nickname}\";", _sqlc);
+                            removeViewerCommand.ExecuteNonQuery();
+                        }
+
+                        break;
                     }
-                    break;
+                    default:
+                        if (splitMsg[2] == "PRIVMSG") UserMsgHandler(msg);
+                        else AddText(msg);
+                        break;
                 }
-                default:
-                    if (splitMsg[2]=="PRIVMSG") UserMsgHandler(msg);
-                    else AddText(msg);
-                    break;
+            }
+            catch (Exception ex)
+            {
+                AddText(ex.Message+"\r\n");
+                AddText(msg + "\r\n");
             }
         }
         private void UserMsgHandler(string msg)

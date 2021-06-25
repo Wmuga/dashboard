@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Dashboard
 {
@@ -37,13 +38,13 @@ namespace Dashboard
             SendMsgIrc($"JOIN {channel}");
         }
 
-        public string ReadLine(CancellationToken token)
+        public Task<string> ReadLine(CancellationToken token)
         {
             using (token.Register(Close))
             {
                 try
                 {
-                    return _reader.ReadLine()+"\r\n";
+                    return _reader.ReadLineAsync();
                 }
                 catch (Exception ex)
                 {

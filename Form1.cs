@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Dashboard
@@ -16,15 +18,7 @@ namespace Dashboard
             _cts = new CancellationTokenSource();
             _ct = _cts.Token;
             _twitchIrc = new IrcClient("irc.chat.twitch.tv",6667);
-            _readThread = new Thread(ReadIrc);
-            _updateThread = new Thread(SetLists);
-            _isRunning = true;
-            _readThread.Start();
-            _updateThread.Start();
-            _twitchIrc.Login("justinfan9812","justchillin");
-            _twitchIrc.Join("#wmuga");
-            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/tags");
-            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/membership");
+
         }
 
         private void InitSqlite()
@@ -73,6 +67,7 @@ namespace Dashboard
         {
             InitializeComponent();
             this.Load += InitInnerComponents;
+            this.Shown += SetAsyncs;
             Application.ApplicationExit += ExitHandler;
             //FormClosing += ExitHandler;
         }
@@ -82,6 +77,17 @@ namespace Dashboard
             InitSqlite();
             InitIrc();
             InitEventSub();
+        }
+
+        private void SetAsyncs(object sender, EventArgs e)
+        {
+            _isRunning = true;
+            ReadIrc();
+            _twitchIrc.Login("justinfan9812","justchillin");
+            _twitchIrc.Join("#wmuga");
+            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/tags");
+            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/membership");
+            SetLists();
         }
 
         private void ExitHandler(object sender, EventArgs e)
@@ -95,24 +101,21 @@ namespace Dashboard
         {
             _isRunning = false;
             _cts.Cancel();
-            _readThread.Abort();
-            _updateThread.Abort();
-            _readThread.Join();
-            _updateThread.Join();
         }
 
-        private void ReadIrc()
+        private async void ReadIrc()
         {
             while(_isRunning)
             {
-                string message = _twitchIrc.ReadLine(_ct);
-                MainMessageHandler(message);
-                Thread.Sleep(10);
+                string message = await _twitchIrc.ReadLine(_ct);
+                MainMessageHandler(message+"\r\n");
+                Debug.WriteLine(message);
+                await Task.Delay(50);
             }
 
         }
 
-        private void SetLists()
+        private async void SetLists()
         {
             while (_isRunning)
             {
@@ -151,7 +154,7 @@ namespace Dashboard
                 eventTextBox.Text = events.Count > 0
                     ? String.Join("\r\n", events)
                     : ""; 
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
             }
         }
         
@@ -198,13 +201,12 @@ namespace Dashboard
             AddText($"{sType} - {nickname}\r\n");
             addEventCommand.ExecuteNonQuery();
         }
+        
 
         private bool _isRunning;
         private CancellationTokenSource _cts;
         private CancellationToken _ct;
         private IrcClient _twitchIrc;
-        private Thread _readThread;
-        private Thread _updateThread;
         private SQLiteConnection _sqlc;
         private EventSubServer _eventSub;
         private const int Port = 3000;
