@@ -195,7 +195,7 @@ namespace Dashboard
             }
             SQLiteCommand addEventCommand = new SQLiteCommand(
                 "insert into events (id,event_type,nickname) values(@id,@event_type,@nickname);", _sqlc);
-            addEventCommand.Parameters.AddWithValue("@id", _lastId++);
+            addEventCommand.Parameters.AddWithValue("@id", ++_lastId);
             addEventCommand.Parameters.AddWithValue("@event_type", sType);
             addEventCommand.Parameters.AddWithValue("@nickname", nickname);
             AddText($"{sType} - {nickname}\r\n");
@@ -211,6 +211,18 @@ namespace Dashboard
         private EventSubServer _eventSub;
         private const int Port = 3000;
         private int _lastId;
-        
+
+        private void sendMsgButton_Click(object sender, EventArgs e)
+        {
+            if (channelTextBox.Text.Length>0 && msgTextBox.Text.Length>0)
+            {
+                IrcClient wmugaIrc = new IrcClient("irc.chat.twitch.tv", 6667);
+                wmugaIrc.Login("wmuga", Environment.GetEnvironmentVariable("IRC_OAUTH"));
+                wmugaIrc.Join($"#{channelTextBox.Text.ToLower()}");
+                wmugaIrc.SendMsgChannel($"#{channelTextBox.Text.ToLower()}",msgTextBox.Text);
+                wmugaIrc.Close();
+                msgTextBox.Text = "";
+            }
+        }
     }
 }

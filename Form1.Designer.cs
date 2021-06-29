@@ -33,6 +33,9 @@
             this.currentViewersBox = new System.Windows.Forms.RichTextBox();
             this.eventTextBox = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.sendMsgButton = new System.Windows.Forms.Button();
+            this.msgTextBox = new System.Windows.Forms.RichTextBox();
+            this.channelTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // IrcMsgBox
@@ -65,7 +68,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(324, 218);
+            this.button1.Location = new System.Drawing.Point(342, 221);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(101, 25);
             this.button1.TabIndex = 3;
@@ -73,11 +76,40 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // sendMsgButton
+            // 
+            this.sendMsgButton.Location = new System.Drawing.Point(506, 415);
+            this.sendMsgButton.Name = "sendMsgButton";
+            this.sendMsgButton.Size = new System.Drawing.Size(100, 32);
+            this.sendMsgButton.TabIndex = 4;
+            this.sendMsgButton.Text = "send";
+            this.sendMsgButton.UseVisualStyleBackColor = true;
+            this.sendMsgButton.Click += new System.EventHandler(this.sendMsgButton_Click);
+            // 
+            // msgTextBox
+            // 
+            this.msgTextBox.Location = new System.Drawing.Point(506, 98);
+            this.msgTextBox.Name = "msgTextBox";
+            this.msgTextBox.Size = new System.Drawing.Size(99, 286);
+            this.msgTextBox.TabIndex = 5;
+            this.msgTextBox.Text = "";
+            // 
+            // channelTextBox
+            // 
+            this.channelTextBox.Location = new System.Drawing.Point(506, 37);
+            this.channelTextBox.Name = "channelTextBox";
+            this.channelTextBox.Size = new System.Drawing.Size(99, 41);
+            this.channelTextBox.TabIndex = 6;
+            this.channelTextBox.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(500, 475);
+            this.ClientSize = new System.Drawing.Size(645, 475);
+            this.Controls.Add(this.channelTextBox);
+            this.Controls.Add(this.msgTextBox);
+            this.Controls.Add(this.sendMsgButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.eventTextBox);
             this.Controls.Add(this.currentViewersBox);
@@ -86,6 +118,10 @@
             this.Text = "Form1";
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button sendMsgButton;
+        private System.Windows.Forms.RichTextBox msgTextBox;
+        private System.Windows.Forms.RichTextBox channelTextBox;
 
         private System.Windows.Forms.Button button1;
 
