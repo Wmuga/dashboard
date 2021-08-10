@@ -1,4 +1,6 @@
-﻿namespace Dashboard
+﻿using System.Windows.Forms;
+
+namespace Dashboard
 {
     partial class Form1
     {
@@ -29,101 +31,219 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.IrcMsgBox = new System.Windows.Forms.RichTextBox();
             this.currentViewersBox = new System.Windows.Forms.RichTextBox();
             this.eventTextBox = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonSetSubs = new System.Windows.Forms.Button();
             this.sendMsgButton = new System.Windows.Forms.Button();
             this.msgTextBox = new System.Windows.Forms.RichTextBox();
             this.channelTextBox = new System.Windows.Forms.RichTextBox();
+            this.topPanel = new System.Windows.Forms.Panel();
+            this.labelDashboard = new System.Windows.Forms.Label();
+            this.closeButton = new System.Windows.Forms.Button();
+            this.labelChat = new System.Windows.Forms.Label();
+            this.labelViewers = new System.Windows.Forms.Label();
+            this.labelMessage = new System.Windows.Forms.Label();
+            this.startReqButton = new System.Windows.Forms.Button();
+            this.endReqButton = new System.Windows.Forms.Button();
+            this.skipReqButton = new System.Windows.Forms.Button();
+            this.commandLabel = new System.Windows.Forms.Label();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // IrcMsgBox
             // 
-            this.IrcMsgBox.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.IrcMsgBox.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.IrcMsgBox.Location = new System.Drawing.Point(12, 37);
+            this.IrcMsgBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (51)))), ((int) (((byte) (153)))));
+            this.IrcMsgBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.IrcMsgBox, "IrcMsgBox");
+            this.IrcMsgBox.ForeColor = System.Drawing.SystemColors.Control;
             this.IrcMsgBox.Name = "IrcMsgBox";
             this.IrcMsgBox.ReadOnly = true;
-            this.IrcMsgBox.Size = new System.Drawing.Size(278, 426);
-            this.IrcMsgBox.TabIndex = 0;
-            this.IrcMsgBox.Text = "";
             // 
             // currentViewersBox
             // 
-            this.currentViewersBox.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.currentViewersBox.Location = new System.Drawing.Point(309, 41);
+            this.currentViewersBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (51)))), ((int) (((byte) (153)))));
+            this.currentViewersBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.currentViewersBox, "currentViewersBox");
+            this.currentViewersBox.ForeColor = System.Drawing.SystemColors.Control;
             this.currentViewersBox.Name = "currentViewersBox";
-            this.currentViewersBox.Size = new System.Drawing.Size(172, 169);
-            this.currentViewersBox.TabIndex = 1;
-            this.currentViewersBox.Text = "";
             // 
             // eventTextBox
             // 
-            this.eventTextBox.Location = new System.Drawing.Point(309, 257);
+            this.eventTextBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (51)))), ((int) (((byte) (153)))));
+            this.eventTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.eventTextBox, "eventTextBox");
+            this.eventTextBox.ForeColor = System.Drawing.SystemColors.Control;
             this.eventTextBox.Name = "eventTextBox";
-            this.eventTextBox.Size = new System.Drawing.Size(171, 205);
-            this.eventTextBox.TabIndex = 2;
-            this.eventTextBox.Text = "";
             // 
-            // button1
+            // buttonSetSubs
             // 
-            this.button1.Location = new System.Drawing.Point(342, 221);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 25);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonSetSubs.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.buttonSetSubs.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            resources.ApplyResources(this.buttonSetSubs, "buttonSetSubs");
+            this.buttonSetSubs.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.buttonSetSubs.Name = "buttonSetSubs";
+            this.buttonSetSubs.UseVisualStyleBackColor = false;
+            this.buttonSetSubs.Click += new System.EventHandler(this.button1_Click);
             // 
             // sendMsgButton
             // 
-            this.sendMsgButton.Location = new System.Drawing.Point(506, 415);
+            this.sendMsgButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.sendMsgButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            resources.ApplyResources(this.sendMsgButton, "sendMsgButton");
+            this.sendMsgButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
             this.sendMsgButton.Name = "sendMsgButton";
-            this.sendMsgButton.Size = new System.Drawing.Size(100, 32);
-            this.sendMsgButton.TabIndex = 4;
-            this.sendMsgButton.Text = "send";
-            this.sendMsgButton.UseVisualStyleBackColor = true;
+            this.sendMsgButton.UseVisualStyleBackColor = false;
             this.sendMsgButton.Click += new System.EventHandler(this.sendMsgButton_Click);
             // 
             // msgTextBox
             // 
-            this.msgTextBox.Location = new System.Drawing.Point(506, 98);
+            this.msgTextBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (51)))), ((int) (((byte) (153)))));
+            this.msgTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.msgTextBox, "msgTextBox");
+            this.msgTextBox.ForeColor = System.Drawing.SystemColors.Control;
             this.msgTextBox.Name = "msgTextBox";
-            this.msgTextBox.Size = new System.Drawing.Size(99, 286);
-            this.msgTextBox.TabIndex = 5;
-            this.msgTextBox.Text = "";
             // 
             // channelTextBox
             // 
-            this.channelTextBox.Location = new System.Drawing.Point(506, 37);
+            this.channelTextBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (51)))), ((int) (((byte) (153)))));
+            this.channelTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.channelTextBox, "channelTextBox");
+            this.channelTextBox.ForeColor = System.Drawing.SystemColors.Control;
             this.channelTextBox.Name = "channelTextBox";
-            this.channelTextBox.Size = new System.Drawing.Size(99, 41);
-            this.channelTextBox.TabIndex = 6;
-            this.channelTextBox.Text = "";
+            // 
+            // topPanel
+            // 
+            this.topPanel.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (50)))), ((int) (((byte) (50)))), ((int) (((byte) (50)))));
+            this.topPanel.Controls.Add(this.labelDashboard);
+            this.topPanel.Controls.Add(this.closeButton);
+            resources.ApplyResources(this.topPanel, "topPanel");
+            this.topPanel.Name = "topPanel";
+            // 
+            // labelDashboard
+            // 
+            resources.ApplyResources(this.labelDashboard, "labelDashboard");
+            this.labelDashboard.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.labelDashboard.Name = "labelDashboard";
+            // 
+            // closeButton
+            // 
+            this.closeButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (50)))), ((int) (((byte) (50)))), ((int) (((byte) (50)))));
+            this.closeButton.FlatAppearance.BorderSize = 0;
+            resources.ApplyResources(this.closeButton, "closeButton");
+            this.closeButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (129)))), ((int) (((byte) (7)))), ((int) (((byte) (11)))));
+            this.closeButton.Name = "closeButton";
+            this.closeButton.UseVisualStyleBackColor = false;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            // 
+            // labelChat
+            // 
+            resources.ApplyResources(this.labelChat, "labelChat");
+            this.labelChat.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.labelChat.Name = "labelChat";
+            // 
+            // labelViewers
+            // 
+            resources.ApplyResources(this.labelViewers, "labelViewers");
+            this.labelViewers.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.labelViewers.Name = "labelViewers";
+            // 
+            // labelMessage
+            // 
+            resources.ApplyResources(this.labelMessage, "labelMessage");
+            this.labelMessage.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.labelMessage.Name = "labelMessage";
+            // 
+            // startReqButton
+            // 
+            this.startReqButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.startReqButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            resources.ApplyResources(this.startReqButton, "startReqButton");
+            this.startReqButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.startReqButton.Name = "startReqButton";
+            this.startReqButton.UseVisualStyleBackColor = false;
+            this.startReqButton.Click += new System.EventHandler(this.startReqButton_Click);
+            // 
+            // endReqButton
+            // 
+            this.endReqButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.endReqButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            resources.ApplyResources(this.endReqButton, "endReqButton");
+            this.endReqButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.endReqButton.Name = "endReqButton";
+            this.endReqButton.UseVisualStyleBackColor = false;
+            this.endReqButton.Click += new System.EventHandler(this.endReqButton_Click);
+            // 
+            // skipReqButton
+            // 
+            this.skipReqButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.skipReqButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            resources.ApplyResources(this.skipReqButton, "skipReqButton");
+            this.skipReqButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.skipReqButton.Name = "skipReqButton";
+            this.skipReqButton.UseVisualStyleBackColor = false;
+            this.skipReqButton.Click += new System.EventHandler(this.skipReqButton_Click);
+            // 
+            // commandLabel
+            // 
+            resources.ApplyResources(this.commandLabel, "commandLabel");
+            this.commandLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (24)))), ((int) (((byte) (136)))), ((int) (((byte) (156)))));
+            this.commandLabel.Name = "commandLabel";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 475);
+            this.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (32)))), ((int) (((byte) (32)))), ((int) (((byte) (32)))));
+            this.Controls.Add(this.commandLabel);
+            this.Controls.Add(this.labelMessage);
+            this.Controls.Add(this.labelViewers);
+            this.Controls.Add(this.labelChat);
+            this.Controls.Add(this.topPanel);
             this.Controls.Add(this.channelTextBox);
             this.Controls.Add(this.msgTextBox);
+            this.Controls.Add(this.skipReqButton);
+            this.Controls.Add(this.endReqButton);
+            this.Controls.Add(this.startReqButton);
             this.Controls.Add(this.sendMsgButton);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSetSubs);
             this.Controls.Add(this.eventTextBox);
             this.Controls.Add(this.currentViewersBox);
             this.Controls.Add(this.IrcMsgBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.ShowIcon = false;
+            this.topPanel.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label commandLabel;
+
+        private System.Windows.Forms.Button skipReqButton;
+
+        private System.Windows.Forms.Button endReqButton;
+
+        private System.Windows.Forms.Button startReqButton;
+
+        private System.Windows.Forms.Label labelViewers;
+        private System.Windows.Forms.Label labelMessage;
+
+        private System.Windows.Forms.Label labelChat;
+
+        private System.Windows.Forms.Label labelDashboard;
+        
+
+        private System.Windows.Forms.Button closeButton;
+
+        private System.Windows.Forms.Button buttonSetSubs;
+
+        private System.Windows.Forms.Panel topPanel;
 
         private System.Windows.Forms.Button sendMsgButton;
         private System.Windows.Forms.RichTextBox msgTextBox;
         private System.Windows.Forms.RichTextBox channelTextBox;
-
-        private System.Windows.Forms.Button button1;
+        
 
         private System.Windows.Forms.RichTextBox eventTextBox;
 

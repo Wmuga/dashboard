@@ -113,57 +113,31 @@ namespace Dashboard
         protected HttpListener _listener;
     }
     
-    public class EventSubServer:HttpServer{
+    public class EventSubServer{
 
-        public EventSubServer(int port):base($"localhost:{port}/eventsub/callback/")
+        public EventSubServer()
         {
             Requests r = new Requests();
             _appToken = r.TokenRequest();
             _subscriptionResponseDictionary = new Dictionary<string, StringResponseHandler>();
-            _tunnel = new NgrokClient(port);
+            _client = new NgrokClient();
             CloseAll();
         }
-        
-        
-        public async void Start(CancellationToken ct)
+
+        private void Callback(string requestContent)
         {
-            using (ct.Register(_listener.Abort))
-            {
-                try
-                {
-                    while (!ct.IsCancellationRequested)
-                    {
-                        HttpListenerContext   hlc = await _listener.GetContextAsync();
-                        HttpListenerRequest  request = hlc.Request;
-                        HttpListenerResponse response = hlc.Response;
-                        byte[] buffer = new byte[request.ContentLength64];
-                        
-                        await request.InputStream.ReadAsync(buffer, 0, (int) request.ContentLength64);
-                        string requestContent = String.Join("", Encoding.UTF8.GetChars(buffer));
-                        string status = (string)JObject.Parse(requestContent)["subscription"]["status"];
-                        
-                        if (status == "webhook_callback_verification_pending")
-                        {
-                            string challenge = (string)JObject.Parse(requestContent)["challenge"];
-                            byte[] responseBuffer = Encoding.UTF8.GetBytes(challenge);
-                            Stream outputStream = response.OutputStream;
-                            outputStream.Write(responseBuffer, 0, responseBuffer.Length);
-                            outputStream.Close();
-                        }
-                        else
-                        {
-                            string type = (string)JObject.Parse(requestContent)["subscription"]["type"];
-                            _subscriptionResponseDictionary[type](requestContent);
-                            response.ContentLength64 = 0;
-                            Stream outputStream = response.OutputStream;
-                            outputStream.Close();
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                }
-            }
+            string type = (string)JObject.Parse(requestContent)["subscription"]["type"];
+            _subscriptionResponseDictionary[type](requestContent);
+        }
+        
+        public void Start()
+        {
+            _client.SetCallback("data",Callback);
+        }
+
+        public void SetAnyCallback(StringDataHandler callback)
+        {
+            _client.SetCallback(callback);
         }
 
         public HttpResponseMessage SetSubscription(SubscriptionType type, StringResponseHandler responseHandler,int id)
@@ -193,7 +167,7 @@ namespace Dashboard
 
         private string GetUrl()
         {
-            return _tunnel.GetUrl();
+            return _client.GetUrl();
         }
 
         public HttpResponseMessage GetSubscriptions()
@@ -238,7 +212,7 @@ namespace Dashboard
             }
         }
 
-        private NgrokClient _tunnel;
+        private NgrokClient _client;
         private Dictionary<string, StringResponseHandler> _subscriptionResponseDictionary;
         private string _appToken;
     }

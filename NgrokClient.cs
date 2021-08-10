@@ -1,43 +1,42 @@
 ﻿using System;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Threading;
+using SocketIOClient;
 
 namespace Dashboard
 {
+    public delegate void StringDataHandler(string response);
     public class NgrokClient
     {
-        public NgrokClient(int port)
+        public NgrokClient()
         {
-            _ngrokClient = new Process();
-            ProcessStartInfo psi = new ProcessStartInfo(@"D:\Programs\Ngrok\ngrok.exe");
-            psi.UseShellExecute = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.Arguments = $"http {port} -host-header=\"localhost:{port}\"";
-            _ngrokClient.StartInfo = psi;
-            Process.Start(@"D:\Programs\Ngrok\ngrok.exe",
-                $"authtoken {Environment.GetEnvironmentVariable("NGROK_AUTHTOKEN")}");
-            _ngrokClient.Start();
-            Thread.Sleep(100);
+
+            _ngrokClient = new SocketIO($"http://{Environment.GetEnvironmentVariable("IP")}:3001/");
+            _ngrokClient.ConnectAsync();
+            _ngrokClient.OnConnected += (sender, args) => _ngrokClient.EmitAsync("eventSub");
         }
         public string GetUrl()
         {
             HttpClient client = new HttpClient();
-            dynamic response = JObject.Parse(client.GetAsync("http://localhost:4040/api/tunnels").Result.Content.ReadAsStringAsync().Result);
-            string res = response["tunnels"][0]["public_url"];
-            foreach (dynamic url in response["tunnels"])
-            {
-                if (url["proto"] == "https") res = url["public_url"];
-            }
-            return res;
+            return client.GetAsync($"http://{Environment.GetEnvironmentVariable("IP")}:3000/").Result.Content.ReadAsStringAsync().Result;
+        }
+
+        public void SetCallback(string eventName, StringDataHandler callback)
+        {
+            _ngrokClient.On(eventName, response => { callback(response.GetValue<string>());});
+        }
+
+        public void SetCallback(StringDataHandler callback)
+        {
+            _ngrokClient.OnAny((name, response) => callback(name+"\r\n"+response.GetValue<string>()));
         }
         
         ~NgrokClient()
         {
-            _ngrokClient.Kill();
+            _ngrokClient.DisconnectAsync().Wait();
         }
 
-        private Process _ngrokClient;
+        private SocketIO _ngrokClient;
     }
 }
