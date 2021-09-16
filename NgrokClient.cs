@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Diagnostics;
-using System.Threading;
 using SocketIOClient;
 
 namespace Dashboard
@@ -22,6 +20,11 @@ namespace Dashboard
             return client.GetAsync($"http://{Environment.GetEnvironmentVariable("IP")}:3000/").Result.Content.ReadAsStringAsync().Result;
         }
 
+        public void EmitData(string eventName, object data)
+        {
+            _ngrokClient.EmitAsync(eventName,data);
+        }
+
         public void SetCallback(string eventName, StringDataHandler callback)
         {
             _ngrokClient.On(eventName, response => { callback(response.GetValue<string>());});
@@ -31,6 +34,7 @@ namespace Dashboard
         {
             _ngrokClient.OnAny((name, response) => callback(name+"\r\n"+response.GetValue<string>()));
         }
+        
         
         ~NgrokClient()
         {

@@ -119,28 +119,28 @@ namespace Dashboard
         {
             Requests r = new Requests();
             _appToken = r.TokenRequest();
-            _subscriptionResponseDictionary = new Dictionary<string, StringResponseHandler>();
             _client = new NgrokClient();
             CloseAll();
         }
-
-        private void Callback(string requestContent)
+        
+        
+        public void Start(StringDataHandler callback)
         {
-            string type = (string)JObject.Parse(requestContent)["subscription"]["type"];
-            _subscriptionResponseDictionary[type](requestContent);
+            _client.SetCallback("data",callback);
         }
         
-        public void Start()
+        
+        public void SetCallback(string eventName,StringDataHandler callback)
         {
-            _client.SetCallback("data",Callback);
+            _client.SetCallback(eventName,callback);
         }
 
-        public void SetAnyCallback(StringDataHandler callback)
+        public void Emit(string eventName, object data)
         {
-            _client.SetCallback(callback);
+            _client.EmitData(eventName,data);
         }
 
-        public HttpResponseMessage SetSubscription(SubscriptionType type, StringResponseHandler responseHandler,int id)
+        public HttpResponseMessage SetSubscription(SubscriptionType type,int id)
         {
             HttpRequestMessage msg = new HttpRequestMessage
             {
@@ -153,7 +153,6 @@ namespace Dashboard
                 }
             };
             string sType = CamelCaseToDotCase.Convert(type.ToString());
-            _subscriptionResponseDictionary.Add(sType,responseHandler);
             string content = "{\"type\": \""+sType+"\"," +
                              "\"version\": \"1\",\"condition\": " +
                              "{\""+ (type==SubscriptionType.ChannelRaid ? "to_" : "") +"broadcaster_user_id\": \""+id+"\"}," +
@@ -213,8 +212,8 @@ namespace Dashboard
         }
 
         private NgrokClient _client;
-        private Dictionary<string, StringResponseHandler> _subscriptionResponseDictionary;
         private string _appToken;
+        
     }
 }
 

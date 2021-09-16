@@ -13,7 +13,7 @@ namespace Dashboard
             {
                 case "RECONNECT": 
                 {
-                    TerminateThread();
+                    ExitHandler(null,null);
                     InitIrc();
                     break;
                 }
@@ -38,27 +38,12 @@ namespace Dashboard
                 {
                     case "JOIN":
                     {
-                        if (nickname != "justinfan9812")
-                        {
-                            AddText($"{nickname} joined\r\n");
-                            SQLiteCommand addViewerCommand = new SQLiteCommand(
-                                "insert into viewers (nickname) values(@nick);", _sqlc);
-                            addViewerCommand.Parameters.AddWithValue("@nick", nickname);
-                            addViewerCommand.ExecuteNonQuery();
-                        }
-
+                        _viewers.Add(nickname);
                         break;
                     }
                     case "PART":
                     {
-                        if (nickname != "justinfan9812")
-                        {
-                            AddText($"{nickname} parted\r\n");
-                            SQLiteCommand removeViewerCommand = new SQLiteCommand(
-                                $"delete from viewers where nickname = \"{nickname}\";", _sqlc);
-                            removeViewerCommand.ExecuteNonQuery();
-                        }
-
+                        _viewers.Remove(nickname);
                         break;
                     }
                     default:
