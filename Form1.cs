@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace Dashboard
 {
@@ -31,7 +30,6 @@ namespace Dashboard
         {
             InitializeComponent();
             this.Load += InitInnerComponents;
-            this.Shown += SetAsyncs;
             Application.ApplicationExit += ExitHandler;
             topPanel.MouseDown += topPanel_MouseDown;
             topPanel.MouseUp += topPanel_MouseUp;
@@ -59,16 +57,6 @@ namespace Dashboard
             }
         }
         
-        private void SetAsyncs(object sender, EventArgs e)
-        {
-            _isRunning = true;
-            ReadIrc();
-            _twitchIrc.Login("justinfan9812","justchillin");
-            _twitchIrc.Join("#wmuga");
-            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/tags");
-            _twitchIrc.SendMsgIrc("CAP REQ :twitch.tv/membership");
-            SetLists();
-        }
 
         private void ExitHandler(object sender, EventArgs e)
         {
@@ -78,18 +66,6 @@ namespace Dashboard
         private void TerminateThread()
         {
             _isRunning = false;
-            _cts.Cancel();
-        }
-
-        private async void ReadIrc()
-        {
-            while(_isRunning)
-            {
-                string message = await _twitchIrc.ReadLine(_ct);
-                MainMessageHandler(message+"\r\n");
-                await Task.Delay(50);
-            }
-
         }
 
         private async void SetLists()
@@ -104,20 +80,19 @@ namespace Dashboard
         }
         
 
-        private void AddText(string msg)
+        private void AddСhatText(string text, Color color, bool bold = false)
         {
-            IrcMsgBox.Text += msg == null ? "NULL\r\n" : msg;
-            IrcMsgBox.SelectionStart = IrcMsgBox.Text.Length;
-            IrcMsgBox.ScrollToCaret();
+            IrcMsgBox.SelectionStart = IrcMsgBox.TextLength;
+            IrcMsgBox.SelectionLength = 0;
+            IrcMsgBox.SelectionColor = color;
+            IrcMsgBox.SelectionFont = new Font(IrcMsgBox.SelectionFont.FontFamily, IrcMsgBox.SelectionFont.Size, bold ? FontStyle.Bold : FontStyle.Regular);
+            IrcMsgBox.AppendText(text);
+            IrcMsgBox.SelectionColor = IrcMsgBox.ForeColor;
         }
 
-
         private bool _isRunning;
-        private CancellationTokenSource _cts;
-        private CancellationToken _ct;
-        private IrcClient _twitchIrc;
+        private TwitchIrcClient _twitchIrc;
         private EventSubServer _eventSub;
-        private int _lastId;
         private bool _mouseDown;
         private Point _lastLocation;
         private List<string> _viewers;
@@ -159,12 +134,15 @@ namespace Dashboard
         {
             if (channelTextBox.Text.Length>0)
             {
-                IrcClient wmugaIrc = new IrcClient("irc.chat.twitch.tv", 6667);
-                wmugaIrc.Login("wmuga", Environment.GetEnvironmentVariable("IRC_OAUTH"));
-                wmugaIrc.Join($"#{channelTextBox.Text.ToLower()}");
-                wmugaIrc.SendMsgChannel($"#{channelTextBox.Text.ToLower()}", message);
-                wmugaIrc.Close();
-                msgTextBox.Text = "";
+                TwitchIrcClient wmugaIrc = new TwitchIrcClient();
+                wmugaIrc.Connect("wmuga", Environment.GetEnvironmentVariable("IRC_OAUTH"));
+                wmugaIrc.OnConnect += (object sender, EventArgs e) =>
+                {
+                    wmugaIrc.Join($"#{channelTextBox.Text.ToLower()}");
+                    wmugaIrc.SendMsgChannel($"#{channelTextBox.Text.ToLower()}", message);
+                    wmugaIrc.Close();
+                    msgTextBox.Text = "";
+                };
             }
         }
         private void closeButton_Click(object sender, EventArgs e)
