@@ -135,7 +135,6 @@ namespace Dashboard
             if (channelTextBox.Text.Length>0)
             {
                 TwitchIrcClient wmugaIrc = new TwitchIrcClient();
-                wmugaIrc.Connect("wmuga", Environment.GetEnvironmentVariable("IRC_OAUTH"));
                 wmugaIrc.OnConnect += (object sender, EventArgs e) =>
                 {
                     wmugaIrc.Join($"#{channelTextBox.Text.ToLower()}");
@@ -143,6 +142,7 @@ namespace Dashboard
                     wmugaIrc.Close();
                     msgTextBox.Text = "";
                 };
+				wmugaIrc.Connect("wmuga", Environment.GetEnvironmentVariable("IRC_OAUTH"));
             }
         }
         private void closeButton_Click(object sender, EventArgs e)
